@@ -1,39 +1,35 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-
-    // Or if using `src` directory:
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       colors: {
         // Primary
         primary: {
-          100: '#E6F6FE', // Lightest
-          200: '#CDEDFB',
-          300: '#B4E3F8',
-          400: '#7BD1F3',
-          500: '#42BEEE', // Base
-          600: '#3BAAE6',
-          700: '#2699BF',
-          800: '#1F7490',
-          900: '#174F61', // Darkest
+          100: '#F5FAFA', // Lightest
+          200: '#EAF6F6',
+          300: '#DFEDED',
+          400: '#BFE0E0',
+          500: '#9FD2D2', // Base
+          600: '#8FBFBF',
+          700: '#5F8080',
+          800: '#466060',
+          900: '#303F3F', // Darkest
         },
         // Secondary
         secondary: {
-          100: '#FFEFE6', // Lightest
-          200: '#FFD9CC',
-          300: '#FFC3B2',
-          400: '#FF987F',
-          500: '#FF6C4C', // Base
-          600: '#E66144',
-          700: '#993F2D',
-          800: '#732F22',
-          900: '#4D2017', // Darkest
+          100: '#F8F9FA', // Lightest
+          200: '#E9ECEF',
+          300: '#DEE2E6',
+          400: '#CED4DA',
+          500: '#ADB5BD', // Base
+          600: '#6C757D',
+          700: '#495057',
+          800: '#343A40',
+          900: '#212529', // Darkest
         },
         // Highlight
         highlight: {
