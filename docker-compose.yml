@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  backend:
+    container_name: rbf_backend
+    restart: unless-stopped
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  frontend:
+    container_name: rbf_frontend
+    restart: unless-stopped
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+
+  mongo:
+    image: mongo
+    volumes:
+      - ./database/mongo-entrypoint:/docker-entrypoint-initdb.d:ro
+      - ./mongo_data:/data/db
+    container_name: rbf_mongodb
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    env_file:
+      - ./.env
+    command: mongod
+
+volumes:
+  mongo_data:
