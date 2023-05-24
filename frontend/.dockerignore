@@ -1,0 +1,12 @@
+# frontend/.dockerignore
+node_modules/
+npm-debug.log
+.next/
+out/
+Dockerfile
+.dockerignore
+.vscode/
+.git/
+.gitignore
+README.md
+LICENSE
