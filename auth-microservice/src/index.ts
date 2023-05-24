@@ -2,18 +2,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import mongoose, { ConnectOptions } from 'mongoose';
-import cookieSession from 'cookie-session';
+import expressSession from 'express-session';
 import passport from 'passport';
 import cors from 'cors';
-import { User } from '@/models/user';
+import { IUser, User } from '@/models/user';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { authRouter } from '@/routes/auth';
 
 const app = express();
 const port = process.env.AUTH_SERVICE_PORT || 5555;
 
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(
   cors({
     origin: process.env.FRONTEND_URI,
@@ -22,18 +20,21 @@ app.use(
 );
 
 app.use(
-  cookieSession({
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    keys: [process.env.COOKIE_KEY!],
+  expressSession({
+    secret: process.env.COOKIE_KEY,
+    resave: false,
+    saveUninitialized: false,
   }),
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: `${process.env.BACKEND_URI}${process.env.BACKEND_AUTH_CALLBACK_ROUTE}`,
+      callbackURL: `${process.env.AUTH_URI}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       const existingUser = await User.findOne({ googleId: profile.id });
@@ -50,11 +51,45 @@ passport.use(
 
       const user = new User({
         googleId: profile.id,
-        email: email, // Set email here.
+        email: email,
+        username: 'RuleBreaker',
       });
       await user.save();
 
       done(undefined, user);
+    },
+  ),
+);
+
+const JwtStrategy = require('passport-jwt').Strategy,
+  ExtractJwt = require('passport-jwt').ExtractJwt;
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
+};
+interface JwtPayload {
+  email: string;
+  [key: string]: any;
+}
+
+passport.use(
+  new JwtStrategy(
+    opts,
+    async (
+      jwt_payload: JwtPayload,
+      done: (error: any, user?: IUser | false) => void,
+    ) => {
+      try {
+        const user: IUser | null = await User.findOne({ id: jwt_payload.sub });
+
+        if (user) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      } catch (err) {
+        return done(err, false);
+      }
     },
   ),
 );
