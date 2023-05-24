@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ObjectIdColumn, ObjectId } from 'typeorm';
 import { Post } from '../post/post';
 import { Comment } from '../comment/comment';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  id: ObjectId;
 
   @Column()
   username: string;

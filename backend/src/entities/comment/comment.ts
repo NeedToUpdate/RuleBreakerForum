@@ -1,17 +1,18 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   ManyToOne,
   OneToMany,
+  ObjectIdColumn,
+  ObjectId,
 } from 'typeorm';
 import { Post } from '../post/post';
 import { User } from '../user/user';
 
 @Entity()
 export class Comment {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  id: ObjectId;
 
   @ManyToOne(() => User, (user) => user.comments)
   user: User;
