@@ -1,4 +1,4 @@
-import { Post } from './post';
+import { Post } from './post.entity';
 
 describe('Post', () => {
   it('should be defined', () => {

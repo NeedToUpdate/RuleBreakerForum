@@ -5,10 +5,11 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
 
-import { User } from '../user/user';
-import { Comment } from '../comment/comment';
+import { User } from '../user/user.entity';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class Post {
@@ -18,8 +19,8 @@ export class Post {
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
-  @ManyToOne(() => User, (user) => user.postsBannedFrom)
-  userBanned: User;
+  @ManyToMany(() => User, (user) => user.postsBannedFrom)
+  usersBanned: User;
 
   @Column('simple-array')
   rules: string[];

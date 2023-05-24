@@ -6,8 +6,8 @@ import {
   ObjectIdColumn,
   ObjectId,
 } from 'typeorm';
-import { Post } from '../post/post';
-import { User } from '../user/user';
+import { Post } from '../post/post.entity';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Comment {

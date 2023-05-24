@@ -1,6 +1,13 @@
-import { Entity, Column, OneToMany, ObjectIdColumn, ObjectId } from 'typeorm';
-import { Post } from '../post/post';
-import { Comment } from '../comment/comment';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  ObjectIdColumn,
+  ObjectId,
+  ManyToMany,
+} from 'typeorm';
+import { Post } from '../post/post.entity';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class User {
@@ -19,6 +26,6 @@ export class User {
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
-  @OneToMany(() => Post, (post) => post.userBanned)
+  @ManyToMany(() => Post, (post) => post.usersBanned)
   postsBannedFrom: Post[];
 }
