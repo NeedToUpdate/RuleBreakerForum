@@ -10,6 +10,9 @@ export class User {
   @Column()
   username: string;
 
+  @Column()
+  email: string;
+
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 

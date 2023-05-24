@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   backend:
@@ -10,7 +10,9 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - "3000:3000"
+      - '3001:3000'
+    depends_on:
+      - mongo
 
   frontend:
     container_name: rbf_frontend
@@ -21,7 +23,7 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "3001:3000"
+      - '3000:3000'
 
   mongo:
     image: mongo
@@ -30,11 +32,24 @@ services:
       - ./mongo_data:/data/db
     container_name: rbf_mongodb
     restart: unless-stopped
-    ports:
-      - 27017:27017
+    expose:
+      - 27017
     env_file:
       - ./.env
     command: mongod
+
+  auth:
+    container_name: rbf_auth
+    restart: unless-stopped
+    build:
+      context: auth-microservice
+      dockerfile: Dockerfile
+    volumes:
+      - ./auth-microservice:/app
+    ports:
+      - '5555:5555'
+    depends_on:
+      - mongo
 
 volumes:
   mongo_data:
