@@ -7,11 +7,11 @@ export class Post {
   @ObjectIdColumn()
   id: ObjectId;
 
-  @Column(() => User)
-  user: User;
+  @Column()
+  user: string;
 
-  @Column(() => User)
-  usersBanned: User[];
+  @Column()
+  usersBanned: string[];
 
   @Column('json')
   rules: [string, string][];

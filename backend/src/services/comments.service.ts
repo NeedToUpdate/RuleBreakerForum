@@ -63,6 +63,9 @@ export class CommentsService {
     if (!post) {
       throw new HttpException('No Post Found', HttpStatus.NOT_FOUND);
     }
+    if (post.usersBanned.includes(session.data._id)) {
+      throw new HttpException('User Is Banned', HttpStatus.FORBIDDEN);
+    }
     const gpt3Response = await this.gpt3Service.judgeComment(
       sanitizeInput(comment.body),
       post.rules.map((x) => sanitizeInput(x[1])),
@@ -73,6 +76,12 @@ export class CommentsService {
       comment.ruleBroken = ruleBroken;
       post.usersBanned.push(session.data._id);
       this.postsRepository.save(post);
+
+      const updatedUsers = [...post.usersBanned, session.data._id];
+
+      await this.postsRepository.update(post.id, {
+        usersBanned: updatedUsers,
+      });
     }
     return this.commentsRepository.save(comment);
   }

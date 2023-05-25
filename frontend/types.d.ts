@@ -5,6 +5,7 @@ interface Post {
   rules: [string, string][];
   title: string;
   createdAt: Date;
+  comments_num: number;
 }
 
 interface User {
