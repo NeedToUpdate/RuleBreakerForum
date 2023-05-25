@@ -2,18 +2,27 @@ import React, { createContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 interface UserContextValue {
-  user: any;
+  user: User | null;
   setUser: React.Dispatch<React.SetStateAction<any>>;
+  logout: () => void;
 }
 
 export const UserContext = createContext<UserContextValue>({
   user: null,
   setUser: () => {},
+  logout: () => {},
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
+  const logout = () => {
+    // Clear the user state
+    setUser(null);
+
+    // Clear the user token from the cookie
+    Cookies.remove("auth_token");
+  };
   useEffect(() => {
     // Parse the JWT token from the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -43,5 +52,5 @@ export function UserProvider({ children }: { children: ReactNode }) {
     validateAndSetUser();
   }, []);
 
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser, logout }}>{children}</UserContext.Provider>;
 }

@@ -6,13 +6,14 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const { method } = req;
+  const { id } = req.query; // Get the id from the request parameters
   const token = req.headers.authorization; // Get the authorization token from the request headers
 
   switch (method) {
     case 'GET':
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts`,
+          `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts/${id}`,
           { headers: { Authorization: token } }, // Pass the token in the request headers
         );
         res.status(200).json(response.data);
@@ -20,20 +21,8 @@ export default async function handler(
         handleAxiosError(error, res);
       }
       break;
-    case 'POST':
-      try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts`,
-          req.body,
-          { headers: { Authorization: token } }, // Pass the token in the request headers
-        );
-        res.status(201).json(response.data);
-      } catch (error) {
-        handleAxiosError(error, res);
-      }
-      break;
     default:
-      res.setHeader('Allow', ['GET', 'POST']);
+      res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
