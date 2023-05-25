@@ -6,9 +6,14 @@
   padding: 0;
   margin: 0;
 }
+html {
+  height: 100%;
+}
 
-html,
+#__next,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0;
 }

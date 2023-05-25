@@ -1,7 +1,9 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useContext, useState } from "react";
 import axios from "axios";
+import { UserContext } from "@/utils/UserContext";
 
 export default function CreatePost() {
+  const { logout } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [rule, setRule] = useState("");
 
@@ -16,7 +18,9 @@ export default function CreatePost() {
 
       // Redirect to home page or somewhere else after successful post creation
     } catch (err) {
-      console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 403) {
+        logout();
+      }
     }
   };
 

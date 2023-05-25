@@ -1,3 +1,4 @@
+import PostViewer from "@/components/PostViewer";
 import { UserContext } from "@/utils/UserContext";
 import Head from "next/head";
 import Link from "next/link";
@@ -5,7 +6,7 @@ import { useContext } from "react";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div className="w-full min-h-screen flex flex-col bg-primary-200 dark:bg-primary-800">
       <Head>
         <title>Rule Breaker</title>
         <meta name="description" content="Break the rules just a little bit." />
@@ -14,7 +15,9 @@ export default function Home() {
         <meta name="theme-color" content="#84b3d7" />
       </Head>
 
-      <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+      <main className="flex min-h-screen flex-col ">
+        <PostViewer />
+      </main>
     </div>
   );
 }
