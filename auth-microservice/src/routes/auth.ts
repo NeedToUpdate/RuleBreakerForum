@@ -63,14 +63,14 @@ async function validateToken(token: string) {
 
 router.get('/auth/validate', async (req, res) => {
   const { token } = req.query;
-
   // Validate the token and retrieve the user
   const isValid = await validateToken(token as string); // This function would contain your token validation logic
 
+  console.log('Validating Token: ', token, isValid);
   if (isValid) {
     res.status(200).json({ authenticated: true });
   } else {
-    res.status(401).json({ authenticated: false });
+    res.status(403).json({ authenticated: false });
   }
 });
 
