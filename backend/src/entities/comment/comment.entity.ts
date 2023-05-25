@@ -1,31 +1,19 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  OneToMany,
-  ObjectIdColumn,
-  ObjectId,
-} from 'typeorm';
-import { Post } from '../post/post.entity';
-import { User } from '../user/user.entity';
+import { Entity, Column, ObjectIdColumn, ObjectId } from 'typeorm';
 
 @Entity()
 export class Comment {
   @ObjectIdColumn()
   id: ObjectId;
 
-  @ManyToOne(() => User, (user) => user.comments)
-  user: User;
+  @Column()
+  userId: string;
 
-  @ManyToOne(() => Post, (post) => post.comments)
-  post: Post;
+  @Column()
+  postId: string;
 
   @Column()
   body: string;
 
-  @OneToMany(() => Comment, (comment) => comment.parent)
-  children: Comment[];
-
-  @ManyToOne(() => Comment, (comment) => comment.children)
-  parent: Comment;
+  @Column({ nullable: true })
+  ruleBroken?: number;
 }

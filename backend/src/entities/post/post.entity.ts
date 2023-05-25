@@ -1,33 +1,27 @@
-import {
-  Entity,
-  ObjectId,
-  ObjectIdColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, ObjectId, ObjectIdColumn, Column } from 'typeorm';
 
 import { User } from '../user/user.entity';
-import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class Post {
   @ObjectIdColumn()
   id: ObjectId;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @Column(() => User)
   user: User;
 
-  @ManyToMany(() => User, (user) => user.postsBannedFrom)
-  usersBanned: User;
+  @Column(() => User)
+  usersBanned: User[];
 
-  @Column('simple-array')
-  rules: string[];
+  @Column('json')
+  rules: [string, string][];
+
+  @Column()
+  title: string;
 
   @Column()
   createdAt: Date;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
+  @Column()
+  comments_num: number;
 }

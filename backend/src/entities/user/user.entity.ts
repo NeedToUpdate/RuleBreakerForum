@@ -22,10 +22,4 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
-
-  @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
-
-  @ManyToMany(() => Post, (post) => post.usersBanned)
-  postsBannedFrom: Post[];
 }

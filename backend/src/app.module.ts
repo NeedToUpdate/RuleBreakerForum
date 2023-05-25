@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { PostsModule } from './post/post.module';
-import { CommentModule } from './comment/comment.module';
+import { CommentsModule } from './comment/comment.module';
 import { ConfigModule } from '@nestjs/config';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -23,7 +23,7 @@ import { LoggerMiddleware } from './middleware/logRequests';
     }),
     UserModule,
     PostsModule,
-    CommentModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
