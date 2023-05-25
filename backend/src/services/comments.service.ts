@@ -7,6 +7,9 @@ import { MongoRepository } from 'typeorm';
 import { Comment } from '@/entities/comment/comment.entity';
 import { Post } from '@/entities/post/post.entity';
 import { ObjectId } from 'mongodb';
+import { Gpt3Service } from './gpt3.service';
+import { sanitizeInput } from '@/utils/commentSanitizer';
+import { getRuleBroken } from '@/utils/judgementExtractor';
 @Injectable()
 export class CommentsService {
   constructor(
@@ -15,6 +18,7 @@ export class CommentsService {
     @InjectRepository(Post)
     private postsRepository: MongoRepository<Post>,
     private readonly httpService: HttpService,
+    private readonly gpt3Service: Gpt3Service,
   ) {}
 
   async create(
@@ -53,7 +57,23 @@ export class CommentsService {
     comment.body = createCommentDto.body;
     comment.userId = session.data._id; // Use the user from the session
     comment.postId = createCommentDto.postId;
-
+    const post = await this.postsRepository.findOne({
+      where: { _id: new ObjectId(createCommentDto.postId) },
+    });
+    if (!post) {
+      throw new HttpException('No Post Found', HttpStatus.NOT_FOUND);
+    }
+    const gpt3Response = await this.gpt3Service.judgeComment(
+      sanitizeInput(comment.body),
+      post.rules.map((x) => sanitizeInput(x[1])),
+    );
+    const ruleBroken = getRuleBroken(gpt3Response);
+    console.log(getRuleBroken(gpt3Response)); // log the GPT-3 response
+    if (ruleBroken !== undefined) {
+      comment.ruleBroken = ruleBroken;
+      post.usersBanned.push(session.data._id);
+      this.postsRepository.save(post);
+    }
     return this.commentsRepository.save(comment);
   }
 

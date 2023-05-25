@@ -46,9 +46,9 @@ export class PostsController {
   async addRule(
     @Param('id') id: string,
     @Body('rule') rule: string,
-    @Headers('authorization') token: string,
+    @Body('userId') userId: string,
   ) {
-    return this.postsService.addRule(id, rule, token);
+    return this.postsService.addRule(id, rule, userId);
   }
   @Delete(':id')
   remove(@Param('id') id: string) {

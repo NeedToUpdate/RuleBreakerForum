@@ -82,11 +82,9 @@ export class PostsService {
   }
 
   async findOne(id: string) {
-    console.log(id);
     const post = await this.postsRepository.findOne({
       where: { _id: new ObjectId(id) },
     });
-    console.log(post);
     if (!post) {
       throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
@@ -112,8 +110,8 @@ export class PostsService {
       throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
 
-    post.rules.push([userId, rule]);
+    const updatedRules: [string, string][] = [...post.rules, [userId, rule]];
 
-    return this.postsRepository.save(post);
+    return await this.postsRepository.update(id, { rules: updatedRules });
   }
 }
