@@ -7,12 +7,12 @@ export default async function handler(
 ) {
   if (req.method === 'PATCH') {
     const { id } = req.query;
-    const { rule } = req.body;
+    const { rule, userId } = req.body;
 
     try {
       const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts/${id}/addRule`,
-        { rule },
+        { rule, userId },
       );
       return res.status(200).json(response.data);
     } catch (error) {

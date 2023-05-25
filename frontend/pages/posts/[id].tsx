@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Comments from "@/components/Comments";
 import CommentBox from "@/components/CommentBox";
+import { UserContext } from "@/utils/UserContext";
+import RuleCreator from "@/components/RuleCreator";
 
 const PostPage = () => {
   const router = useRouter();
@@ -10,7 +12,7 @@ const PostPage = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
-
+  const { user } = useContext(UserContext);
   const getPost = async (id: string) => {
     try {
       const response = await axios.get(`/api/posts/${id}`);
@@ -49,6 +51,17 @@ const PostPage = () => {
     fetchPostAndComments();
   }, [id]);
 
+  const canAddRule = () => {
+    if (comments.length && post?.rules.length) {
+      const numberOfRulesMadeByOP = post.rules.filter((x) => x[0] === user?._id).length;
+      const numberOfCommentsMadeByOP = comments.filter((x) => x.userId === user?._id).length;
+      const numberOfCommentsNeeded = 3;
+      const finalResult = numberOfCommentsMadeByOP - numberOfRulesMadeByOP * numberOfCommentsNeeded - Number(post.user === user?._id) * numberOfCommentsNeeded;
+      return finalResult >= numberOfCommentsNeeded;
+    }
+    return false;
+  };
+
   if (!post || !id) {
     return <div className="bg-primary-200 dark:bg-primary-900 w-full h-full">Loading...</div>;
   }
@@ -59,6 +72,20 @@ const PostPage = () => {
       <p>Rules: {post.rules.map((x) => x[1]).join(", ")}</p>
       <CommentBox onCreate={(comment) => setComments((old) => [...old, comment])} postId={id.toString()} />
       {comments.length > 0 ? <Comments comments={comments} /> : loading ? <div className="w-full flex justify-center">Loading comments...</div> : <div className="w-full flex justify-center">No Comments Yet. Make One!</div>}
+      {canAddRule() && user !== null && post !== null && (
+        <RuleCreator
+          postId={id.toString()}
+          commentsMade={comments.filter((x) => x.userId === user?._id).length}
+          onCreate={(rule) =>
+            setPost((old) => {
+              if (old) {
+                return { ...old, rules: old?.rules.concat([[user._id, rule]]) };
+              }
+              return old;
+            })
+          }
+        />
+      )}
     </div>
   );
 };
