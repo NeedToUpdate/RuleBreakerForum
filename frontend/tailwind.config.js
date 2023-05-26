@@ -9,27 +9,29 @@ module.exports = {
       colors: {
         // Primary
         primary: {
-          100: '#F5FAFA', // Lightest
-          200: '#EAF6F6',
-          300: '#DFEDED',
-          400: '#BFE0E0',
-          500: '#9FD2D2', // Base
-          600: '#8FBFBF',
-          700: '#5F8080',
-          800: '#466060',
-          900: '#303F3F', // Darkest
+          50: '#CEEFEF', // Lightest
+          100: '#9EDFDF',
+          200: '#6ECFCF',
+          300: '#3FC0BF',
+          400: '#10B0AF',
+          500: '#029B9B', // Base
+          600: '#027F7F',
+          700: '#023436', // Provided 700 shade
+          800: '#021A1A',
+          900: '#020000', // Darkest
         },
         // Secondary
         secondary: {
-          100: '#F8F9FA', // Lightest
-          200: '#E9ECEF',
-          300: '#DEE2E6',
-          400: '#CED4DA',
-          500: '#ADB5BD', // Base
-          600: '#6C757D',
-          700: '#495057',
-          800: '#343A40',
-          900: '#212529', // Darkest
+          50: '#FFFFFF', // Lightest
+          100: '#F2F6F8',
+          200: '#E5ECF1',
+          300: '#D8E2EA',
+          400: '#CBDAE3',
+          500: '#BBC7CE', // Provided color (Assumed as 500)
+          600: '#9DA4A8',
+          700: '#7E8182',
+          800: '#5F5E5C',
+          900: '#40403B', // Darkest
         },
         // Highlight
         highlight: {
