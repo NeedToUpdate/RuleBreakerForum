@@ -13,10 +13,9 @@ import { LoggerMiddleware } from './middleware/logRequests';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URI}/${process.env.MONGODB_DATABASE}?authSource=admin`,
-      database: process.env.MONGODB_DATABASE,
+      url: `${process.env.MONGO_CONNECTION_STRING}`,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      ssl: false,
+      ssl: process.env.MONGO_USE_SSL === 'true',
       useUnifiedTopology: true,
       useNewUrlParser: true,
       logging: true,
