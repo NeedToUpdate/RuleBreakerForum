@@ -53,6 +53,15 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
   const [comments, setComments] = useState(initialComments);
   const { user } = useContext(UserContext);
 
+  const getPost = async (postId: string) => {
+    try {
+      const response = await axios.get(`/api/posts/${postId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch post");
+    }
+  };
+
   const getComments = async (postId: string) => {
     try {
       const response = await axios.get(`/api/comments/post/${postId}`);
@@ -66,6 +75,10 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
     const intervalId = setInterval(async () => {
       if (id) {
         try {
+          const newPost = await getPost(id.toString());
+          if (JSON.stringify(newPost) !== JSON.stringify(post)) {
+            setPost(newPost);
+          }
           const newComments = await getComments(id.toString());
           if (JSON.stringify(newComments) !== JSON.stringify(comments)) {
             setComments(newComments);
