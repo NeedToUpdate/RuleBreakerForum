@@ -74,11 +74,9 @@ export class PostsService {
     });
 
     for (const post of posts) {
-      const num = await this.commentsRepository.count({
+      post.comments_num = await this.commentsRepository.count({
         postId: post.id.toString(),
       });
-      post.comments_num = num;
-      console.log(num);
     }
 
     return posts;
