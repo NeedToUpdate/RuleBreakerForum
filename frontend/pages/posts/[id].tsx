@@ -112,7 +112,7 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
 
   return (
     <div className="bg-secondary-200 dark:bg-secondary-900 w-full">
-      <div className="flex flex-col p-5 bg-primary-300 dark:bg-primary-800 dark:text-white">
+      <div className="flex flex-col p-5 bg-primary-300 dark:bg-primary-800 text-secondary-900 dark:text-white">
         <h2 className="text-3xl mb-4">{post.title}</h2>
         <p>Rules:</p>
         {post.rules.map((x, i) => (
@@ -141,6 +141,9 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
             postId={id.toString()}
           />
         )}
+        <div className="w-full flex justify-center p-3">
+          <p className="text-xs italic opacity-50">You can make your own rule every 3 comments made. Remember, chatGPT isn't the smartest and can ban you for no reason. Try to not get banned!</p>
+        </div>
       </div>
       {comments.length > 0 ? (
         <Comments comments={comments} />

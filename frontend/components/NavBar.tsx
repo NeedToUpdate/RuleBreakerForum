@@ -10,7 +10,7 @@ export default function NavBar() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link href="/" className="flex gap-5 items-center">
           <img src="/brain-icon.svg" className="h-8 mr-3" alt="RuleBreaker Forums Logo" />
-          <h3 className="text-black dark:text-white text-2xl font-bold">
+          <h3 className="text-secondary-900 dark:text-white text-2xl font-bold">
             Rule<span className="font-black">Breaker</span>
           </h3>
         </Link>
@@ -18,7 +18,7 @@ export default function NavBar() {
           onClick={() => setExpanded(!expanded)}
           data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center p-2 ml-3 text-sm text-secondary-500 rounded-lg md:hidden hover:bg-secondary-100 focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:text-secondary-400 dark:hover:bg-secondary-700 dark:focus:ring-secondary-600"
+          className="inline-flex items-center p-2 ml-3 text-sm text-secondary-100 rounded-lg md:hidden hover:bg-secondary-300 focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:text-secondary-400 dark:hover:bg-secondary-700 dark:focus:ring-secondary-600"
           aria-controls="navbar-default"
           aria-expanded="false"
         >
@@ -28,12 +28,12 @@ export default function NavBar() {
           </svg>
         </button>
         <div className={`${expanded ? "max-h-[1000px]" : "max-h-0"} md:max-h-none w-full md:block md:w-auto duration-200 overflow-hidden`} id="navbar-default">
-          <ul className="font-medium flex flex-col items-center p-4 md:p-0 mt-4 border border-secondary-100 rounded-lg bg-secondary-50 md:bg-transparent md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-secondary-800 md:dark:bg-transparent dark:border-secondary-700">
+          <ul className="font-medium flex flex-col items-center p-4 md:p-0 mt-4 border border-secondary-100 rounded-lg bg-secondary-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-primary-200 dark:bg-secondary-800 md:dark:bg-transparent dark:border-secondary-700">
             {user ? (
               <>
                 <li>
                   <p className="text-sm pointer-events-none opacity-75 duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent">
-                    User: {user.email}
+                    User: {user.username}
                   </p>
                 </li>
                 <li>
