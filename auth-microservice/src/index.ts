@@ -8,7 +8,7 @@ import cors from 'cors';
 import { IUser, User } from '@/models/user';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { authRouter } from '@/routes/auth';
-
+import { Strategy as GitHubStrategy } from 'passport-github2';
 const app = express();
 const port = process.env.AUTH_SERVICE_PORT || 5555;
 
@@ -37,25 +37,75 @@ passport.use(
       callbackURL: `${process.env.AUTH_URI}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
-      const existingUser = await User.findOne({ googleId: profile.id });
+      let user = await User.findOne({ googleId: profile.id });
 
-      if (existingUser) {
-        return done(undefined, existingUser);
+      if (user) {
+        return done(undefined, user);
       }
-
       // Here we access the email.
       const email =
         profile.emails && profile.emails[0]
           ? profile.emails[0].value
           : undefined;
 
-      const user = new User({
-        googleId: profile.id,
-        email: email,
-        username: 'RuleBreaker',
-      });
-      await user.save();
+      if (!user) {
+        // If the user doesn't exist, check if they have an existing account with the same email
+        user = await User.findOne({ email: email });
+
+        if (user) {
+          // If the user exists by email, add the googleId to their account
+          user.googleId = profile.id;
+          await user.save();
+        } else {
+          // If the user doesn't exist by either Google ID or email, create a new account
+          user = new User({
+            googleId: profile.id,
+            email: email,
+            username: profile.displayName,
+          });
+          await user.save();
+        }
+      }
+
+      done(undefined, user);
+    },
+  ),
+);
+
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      callbackURL: `${process.env.AUTH_URI}/auth/github/callback`,
+    },
+    //eslint-ignore-next-line
+    //@ts-ignore
+    async (accessToken, refreshToken, profile, done) => {
+      let user = await User.findOne({ githubId: profile.id });
+
+      // Here we access the email.
+      const email =
+        profile._json && profile._json.email ? profile._json.email : undefined;
+
+      if (!user) {
+        // If the user doesn't exist, check if they have an existing account with the same email
+        user = await User.findOne({ email: email });
+
+        if (user) {
+          // If the user exists by email, add the githubId to their account
+          user.githubId = profile.id;
+          await user.save();
+        } else {
+          // If the user doesn't exist by either GitHub ID or email, create a new account
+          user = new User({
+            githubId: profile.id,
+            email: email || profile.username + '@github.com',
+            username: profile.username,
+          });
+          await user.save();
+        }
+      }
 
       done(undefined, user);
     },

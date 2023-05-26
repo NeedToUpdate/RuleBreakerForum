@@ -48,6 +48,38 @@ router.get(
   },
 );
 
+router.get(
+  '/auth/github',
+  (req, res, next) => {
+    const { redirectTo } = req.query;
+    const state = JSON.stringify({ redirectTo });
+    const authenticator = passport.authenticate('github', {
+      scope: 'user:email',
+      state,
+      session: true,
+    });
+    authenticator(req, res, next);
+  },
+  (req, res, next) => {
+    next();
+  },
+);
+
+router.get(
+  '/auth/github/callback',
+  passport.authenticate('github'),
+  (req, res, next) => {
+    const token = jwt.sign(
+      { email: (req.user as IUser).email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 60 * 60 * 24 * 1000,
+      },
+    );
+    res.redirect(`${process.env.FRONTEND_URI}/login?token=${token}`);
+  },
+);
+
 async function validateToken(token: string) {
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
