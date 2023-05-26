@@ -1,4 +1,11 @@
-import { Entity, Column, ObjectIdColumn, ObjectId } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ObjectIdColumn,
+  ObjectId,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Comment {
@@ -16,4 +23,10 @@ export class Comment {
 
   @Column({ nullable: true })
   ruleBroken?: number;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

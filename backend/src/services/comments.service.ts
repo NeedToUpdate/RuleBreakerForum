@@ -87,7 +87,10 @@ export class CommentsService {
   }
 
   findByPost(postId: string) {
-    return this.commentsRepository.find({ where: { postId: postId } });
+    return this.commentsRepository.find({
+      where: { postId: postId },
+      order: { createdAt: 'DESC' },
+    });
   }
 
   findOne(id: string) {

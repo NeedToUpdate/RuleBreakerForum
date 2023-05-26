@@ -70,6 +70,7 @@ export class PostsService {
     const posts = await this.postsRepository.find({
       take,
       skip,
+      order: { createdAt: 'DESC' },
     });
 
     for (const post of posts) {

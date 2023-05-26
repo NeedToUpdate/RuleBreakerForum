@@ -1,4 +1,11 @@
-import { Entity, ObjectId, ObjectIdColumn, Column } from 'typeorm';
+import {
+  Entity,
+  ObjectId,
+  ObjectIdColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 import { User } from '../user/user.entity';
 
@@ -19,9 +26,11 @@ export class Post {
   @Column()
   title: string;
 
-  @Column()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
   @Column()
   comments_num: number;
 }
