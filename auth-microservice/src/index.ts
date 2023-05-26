@@ -10,7 +10,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { authRouter } from '@/routes/auth';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 const app = express();
-const port = process.env.AUTH_SERVICE_PORT || 5555;
+const port = process.env.PORT || 5555;
 
 app.use(
   cors({
@@ -150,13 +150,10 @@ passport.use(
 app.use(authRouter);
 
 mongoose
-  .connect(
-    `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URI}/${process.env.MONGODB_DATABASE}?authSource=admin`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as ConnectOptions,
-  )
+  .connect(`${process.env.MONGO_CONNECTION_STRING}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as ConnectOptions)
   .then(() => console.log(`MongoDB connected successfully 😎`))
   .catch((err) => console.log(`MongoDB connection error: ${err}`));
 
