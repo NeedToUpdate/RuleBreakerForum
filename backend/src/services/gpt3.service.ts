@@ -23,7 +23,12 @@ judge: no, 2
 Example:
 1 you must use the word blue
 2 may not use the letter o
-text: bananas are blue
+text: bananas are yellow
+judge: no, 1
+Example:
+1 you must be nice
+2 may not use the letter o
+text: this is very pretty
 judge: yes
 Now you try:
 ${formatArray(rules)}`;
