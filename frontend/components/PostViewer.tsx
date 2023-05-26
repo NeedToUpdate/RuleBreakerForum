@@ -4,18 +4,18 @@ import Loader from "./Basic/Loader";
 import Post from "./Post";
 import Button from "./Basic/Button";
 
-const POSTS_PER_PAGE = 10;
+interface Props {
+  initialPosts: Post[];
+}
 
-export default function PostViewer() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(Math.ceil(posts.length / POSTS_PER_PAGE) || 1);
+export default function PostViewer({ initialPosts }: Props) {
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(true);
   const [moreToShow, setMoreToShow] = useState(true);
-  const [initialLoading, setInitialLoading] = useState(true);
   const abortController = useRef(new AbortController());
 
   useEffect(() => {
-    setInitialLoading(true);
     fetchPosts();
     return () => {
       // Cancel the fetch call when unmounted
@@ -35,7 +35,6 @@ export default function PostViewer() {
       }
       setPage((prevPage) => prevPage + 1);
       setLoading(false);
-      setInitialLoading(false);
     } catch (error) {
       setLoading(false);
       if ((error as { name: string }).name === "CanceledError") {
@@ -53,18 +52,13 @@ export default function PostViewer() {
   return (
     <>
       <h1 className="text-2xl pl-2 font-thin dark:text-primary-300 mb-10">Posts</h1>
-      {initialLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <div className="flex flex-col gap-5">
-            {posts.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
-          </div>
-          <div className="flex w-full p-10 justify-center items-center">{!moreToShow ? <></> : loading ? <Loader /> : <Button onClick={handleShowMore}>Show More</Button>}</div>
-        </>
-      )}
+
+      <div className="flex flex-col gap-5">
+        {posts.map((post) => (
+          <Post key={post.id} post={post} />
+        ))}
+      </div>
+      <div className="flex w-full p-10 justify-center items-center">{!moreToShow ? <></> : loading ? <Loader /> : <Button onClick={handleShowMore}>Show More</Button>}</div>
     </>
   );
 }

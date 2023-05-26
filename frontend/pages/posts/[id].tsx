@@ -6,22 +6,52 @@ import CommentBox from "@/components/CommentBox";
 import { UserContext } from "@/utils/UserContext";
 import RuleCreator from "@/components/RuleCreator";
 import Loader from "@/components/Basic/Loader";
+import { NextPageContext } from "next";
 
-const PostPage = () => {
+export async function getServerSideProps(context: NextPageContext) {
+  // Use an environment variable to get the base URL
+  const baseUrl = process.env.BASE_URL;
+
+  // Get the id from the context
+  const { id } = context.query;
+  let post: Post | null = null;
+  try {
+    // Call an external API endpoint to get posts.
+    const responsePost = await axios.get(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts/${id}`);
+    post = responsePost.data;
+  } catch (e) {
+    //pass
+  }
+  let comments: Comment[] | null = null;
+  try {
+    // Call an external API endpoint to get comments.
+    const responseComments = await axios.get(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/comments/post/${id}`);
+    comments = responseComments.data;
+  } catch (e) {
+    //pass
+  }
+
+  // By returning { props: { post, comments } }, the component
+  // will receive `post` and `comments` as a prop at build time
+  return {
+    props: {
+      initialPost: post || { title: "Failed To Load", rules: [], usersBanned: [] },
+      initialComments: comments || [],
+    },
+  };
+}
+
+interface Props {
+  initialPost: Post;
+  initialComments: Comment[];
+}
+
+export default function SinglePostPage({ initialPost, initialComments }: Props) {
   const router = useRouter();
   const { id } = router.query;
-  const [post, setPost] = useState<Post | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [post, setPost] = useState(initialPost);
+  const [comments, setComments] = useState(initialComments);
   const { user } = useContext(UserContext);
-  const getPost = async (id: string) => {
-    try {
-      const response = await axios.get(`/api/posts/${id}`);
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to fetch post");
-    }
-  };
 
   const getComments = async (postId: string) => {
     try {
@@ -33,27 +63,25 @@ const PostPage = () => {
   };
 
   useEffect(() => {
-    const fetchPostAndComments = async () => {
+    const intervalId = setInterval(async () => {
       if (id) {
         try {
-          setLoading(true);
-          const post = await getPost(id.toString());
-          setPost(post);
-          console.log(post);
-          const comments = await getComments(id.toString());
-          setComments(comments);
-          setLoading(false);
+          const newComments = await getComments(id.toString());
+          if (JSON.stringify(newComments) !== JSON.stringify(comments)) {
+            setComments(newComments);
+          }
         } catch (error) {
-          console.error("Error fetching post or comments:", error);
+          console.error("Error fetching comments:", error);
         }
       }
-    };
+    }, 5000); // Fetch comments every 5 seconds
 
-    fetchPostAndComments();
-  }, [id]);
+    return () => {
+      clearInterval(intervalId); // Clear the interval when the component is unmounted or id changes
+    };
+  }, [id, comments]);
 
   const canAddRule = () => {
-    console.log(comments);
     if (comments.length && post?.rules.length) {
       if (post.usersBanned.includes(user?._id)) return false;
       const numberOfRulesMadeByOP = post.rules.filter((x) => x[0] === user?._id).length;
@@ -84,7 +112,7 @@ const PostPage = () => {
         ) : (
           <CommentBox
             onCreate={(comment) => {
-              if (comment.ruleBroken !== null || comment.ruleBroken !== undefined) {
+              if (typeof comment.ruleBroken === "number") {
                 setPost((old) => {
                   if (old) {
                     return {
@@ -95,16 +123,14 @@ const PostPage = () => {
                   return old;
                 });
               }
-              setComments((old) => [...old, comment]);
+              setComments((old) => [comment, ...old]);
             }}
             postId={id.toString()}
           />
         )}
       </div>
       {comments.length > 0 ? (
-        <Comments comments={comments.reverse()} />
-      ) : loading ? (
-        <Loader />
+        <Comments comments={comments} />
       ) : (
         <div className="w-full flex justify-center p-5 pt-32">
           <p className=" opacity-80 dark:text-white italic">No Comments Yet. Make One!</p>
@@ -126,6 +152,4 @@ const PostPage = () => {
       )}
     </div>
   );
-};
-
-export default PostPage;
+}

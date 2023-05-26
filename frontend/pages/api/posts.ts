@@ -7,12 +7,14 @@ export default async function handler(
 ) {
   const { method } = req;
   const token = req.headers.authorization; // Get the authorization token from the request headers
-
+  const { page } = req.query;
   switch (method) {
     case 'GET':
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts`,
+          `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts?page=${
+            page || 1
+          }`,
           { headers: { Authorization: token } }, // Pass the token in the request headers
         );
         res.status(200).json(response.data);
