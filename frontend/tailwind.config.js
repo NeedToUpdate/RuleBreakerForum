@@ -16,7 +16,7 @@ module.exports = {
           400: '#10B0AF',
           500: '#029B9B', // Base
           600: '#027F7F',
-          700: '#023436', // Provided 700 shade
+          700: '#023436',
           800: '#021A1A',
           900: '#020000', // Darkest
         },
@@ -27,7 +27,7 @@ module.exports = {
           200: '#E5ECF1',
           300: '#D8E2EA',
           400: '#CBDAE3',
-          500: '#BBC7CE', // Provided color (Assumed as 500)
+          500: '#BBC7CE',
           600: '#9DA4A8',
           700: '#7E8182',
           800: '#5F5E5C',
@@ -45,6 +45,9 @@ module.exports = {
           800: '#096827',
           900: '#06451B', // Darkest
         },
+      },
+      fontFamily: {
+        primary: ['var(--kanit-font)'],
       },
     },
   },
