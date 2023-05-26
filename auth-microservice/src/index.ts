@@ -37,6 +37,7 @@ passport.use(
       callbackURL: `${process.env.AUTH_URI}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
+      console.log(profile);
       const existingUser = await User.findOne({ googleId: profile.id });
 
       if (existingUser) {
@@ -80,7 +81,9 @@ passport.use(
       done: (error: any, user?: IUser | false) => void,
     ) => {
       try {
-        const user: IUser | null = await User.findOne({ id: jwt_payload.sub });
+        const user: IUser | null = await User.findOne({
+          email: jwt_payload.email,
+        });
 
         if (user) {
           return done(null, user);

@@ -7,11 +7,11 @@ import jwt from 'jsonwebtoken';
 const router = Router();
 
 passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+  done(null, user.email);
 });
 
-passport.deserializeUser(async (id: string, done) => {
-  await User.findById(id).then((user) => {
+passport.deserializeUser(async (email: string, done) => {
+  await User.findOne({ email: email }).then((user) => {
     done(null, user);
   });
 });
@@ -44,10 +44,7 @@ router.get(
         expiresIn: 60 * 60 * 24 * 1000,
       },
     );
-    req.logIn(req.user, function (err) {
-      if (err) return next(err);
-      res.redirect(`${process.env.FRONTEND_URI}/login?token=${token}`);
-    });
+    res.redirect(`${process.env.FRONTEND_URI}/login?token=${token}`);
   },
 );
 
@@ -65,8 +62,6 @@ router.get('/auth/validate', async (req, res) => {
   const { token } = req.query;
   // Validate the token and retrieve the user
   const isValid = await validateToken(token as string); // This function would contain your token validation logic
-
-  console.log('Validating Token: ', token, isValid);
   if (isValid) {
     res.status(200).json({ authenticated: true });
   } else {
