@@ -14,10 +14,24 @@ export default function Home({ initialPosts }: Props) {
     <div className=" w-full min-h-screen flex flex-col bg-secondary-200 dark:bg-secondary-900">
       <Head>
         <title>Rule Breaker</title>
-        <meta name="description" content="Break the rules just a little bit." />
+        <meta name="title" content="RuleBreaker" />
+        <meta name="description" content="See if you can break some rules!" />
+        <meta name="keywords" content="chatgpt, forum, ai" />
+        <meta name="robots" content="index, follow" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="English" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="msapplication-TileColor" content="#2f6690" />
-        <meta name="theme-color" content="#84b3d7" />
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#023436" />
+        <meta name="apple-mobile-web-app-title" content="RuleBreaker Forums" />
+        <meta name="application-name" content="RuleBreaker Forums" />
+        <meta name="msapplication-TileColor" content="#023436" />
+        <meta name="theme-color" content="#023436" />
       </Head>
 
       <main className="flex min-h-screen flex-col p-5">
