@@ -6,11 +6,13 @@ interface Props {
 }
 
 const Comments = ({ comments }: Props) => {
-  const renderComments = (comments: Comment[]) => {
-    return comments.map((comment) => <Comment comment={comment} />);
-  };
-
-  return <div>{renderComments(comments)}</div>;
+  return (
+    <div className="flex flex-col gap-2 p-5">
+      {comments.map((comment) => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
+    </div>
+  );
 };
 
 export default Comments;

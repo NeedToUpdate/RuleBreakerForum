@@ -26,6 +26,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Parse the JWT token from the URL
     const urlParams = new URLSearchParams(window.location.search);
+    console.log("url: ", urlParams.get("token"));
+    console.log("cookie: ", Cookies.get("auth_token"));
     const token = urlParams.get("token") || Cookies.get("auth_token");
     const validateAndSetUser = async () => {
       if (token) {

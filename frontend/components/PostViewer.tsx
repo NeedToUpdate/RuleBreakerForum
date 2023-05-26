@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
+import Loader from "./Basic/Loader";
+import Post from "./Post";
+import Button from "./Basic/Button";
 
 const POSTS_PER_PAGE = 10;
 
 export default function PostViewer() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(Math.ceil(posts.length / POSTS_PER_PAGE) || 1);
-  const [loading, setLoading] = useState(false);
-  const fetchedPages = useRef<Record<number, boolean>>({});
-  const router = useRouter();
-
+  const [loading, setLoading] = useState(true);
+  const [moreToShow, setMoreToShow] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const abortController = useRef(new AbortController());
 
   useEffect(() => {
+    setInitialLoading(true);
     fetchPosts();
     return () => {
       // Cancel the fetch call when unmounted
@@ -23,24 +25,24 @@ export default function PostViewer() {
   }, []);
 
   const fetchPosts = async () => {
-    if (fetchedPages.current[page]) {
-      return; // Page has been fetched already, abort fetching
-    }
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await axios.get(`/api/posts?page=${page}`, { signal: abortController.current.signal });
       console.log(response.data);
       setPosts((prevPosts) => [...prevPosts, ...response.data]);
-      fetchedPages.current[page] = true; // Mark the page as fetched
+      if (response.data.length < 10) {
+        setMoreToShow(false);
+      }
       setPage((prevPage) => prevPage + 1);
+      setLoading(false);
+      setInitialLoading(false);
     } catch (error) {
+      setLoading(false);
       if ((error as { name: string }).name === "CanceledError") {
         console.log("Fetch aborted");
       } else {
         console.error("Error fetching posts:", error);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -48,22 +50,21 @@ export default function PostViewer() {
     fetchPosts();
   };
 
-  const navigateToPost = (postId: string) => {
-    router.push(`/posts/${postId}`);
-  };
-
   return (
-    <div>
-      <h1>Posts</h1>
-      {posts.map((post) => (
-        <div key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.rules.join(", ")}</p>
-          <p>Comments: {post.comments?.length || 0}</p>
-          <button onClick={() => navigateToPost(post.id)}>Go to Post</button>
-        </div>
-      ))}
-      {loading ? <p>Loading...</p> : <button onClick={handleShowMore}>Show More</button>}
-    </div>
+    <>
+      <h1 className="text-2xl pl-2 font-thin dark:text-primary-300 mb-10">Posts</h1>
+      {initialLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className="flex flex-col gap-5">
+            {posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+          </div>
+          <div className="flex w-full p-10 justify-center items-center">{!moreToShow ? <></> : loading ? <Loader /> : <Button onClick={handleShowMore}>Show More</Button>}</div>
+        </>
+      )}
+    </>
   );
 }

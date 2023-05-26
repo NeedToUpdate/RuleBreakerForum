@@ -6,7 +6,7 @@ import { useContext } from "react";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen flex flex-col bg-primary-200 dark:bg-primary-800">
+    <div className="w-full min-h-screen flex flex-col bg-secondary-200 dark:bg-secondary-900">
       <Head>
         <title>Rule Breaker</title>
         <meta name="description" content="Break the rules just a little bit." />
@@ -15,7 +15,7 @@ export default function Home() {
         <meta name="theme-color" content="#84b3d7" />
       </Head>
 
-      <main className="flex min-h-screen flex-col ">
+      <main className="flex min-h-screen flex-col p-5">
         <PostViewer />
       </main>
     </div>
