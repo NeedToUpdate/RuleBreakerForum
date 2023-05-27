@@ -12,7 +12,7 @@ export default function PostViewer({ initialPosts }: Props) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
-  const [moreToShow, setMoreToShow] = useState(true);
+  const [moreToShow, setMoreToShow] = useState(initialPosts.length >= 10);
   const abortController = useRef(new AbortController());
 
   useEffect(() => {

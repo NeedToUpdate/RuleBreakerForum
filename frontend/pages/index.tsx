@@ -44,7 +44,7 @@ export async function getServerSideProps() {
   let initialPosts: Post[] | null = null;
   try {
     // Call an external API endpoint to get posts.
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts?page=1`);
     initialPosts = response.data;
   } catch (e) {
     //pass

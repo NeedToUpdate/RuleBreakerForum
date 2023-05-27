@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Comments from "@/components/Comments";
 import CommentBox from "@/components/CommentBox";
@@ -10,6 +10,9 @@ import { NextPageContext } from "next";
 import Head from "next/head";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import Username from "@/components/UserName";
+import Button from "@/components/Basic/Button";
+
+const COMMENTS_PER_PAGE = 20;
 
 export async function getServerSideProps(context: NextPageContext) {
   // Get the id from the context
@@ -51,20 +54,24 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
   const { id } = router.query;
   const [post, setPost] = useState(initialPost);
   const [comments, setComments] = useState(initialComments);
+  const [moreToShow, setMoreToShow] = useState(initialComments.length >= COMMENTS_PER_PAGE);
+  const [loading, setLoading] = useState(false);
   const { user } = useContext(UserContext);
+  const abortController = useRef(new AbortController());
+  const [page, setPage] = useState(2);
 
-  const getPost = async (postId: string) => {
+  const getPost = async () => {
     try {
-      const response = await axios.get(`/api/posts/${postId}`);
+      const response = await axios.get(`/api/posts/${post.id}`);
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch post");
     }
   };
 
-  const getComments = async (postId: string) => {
+  const getComments = async (page: number) => {
     try {
-      const response = await axios.get(`/api/comments/post/${postId}`);
+      const response = await axios.get(`/api/comments/post/${post.id}?page=${page}`);
       return response.data;
     } catch (error) {
       console.error("Failed to fetch comments");
@@ -84,13 +91,18 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
     const intervalId = setInterval(async () => {
       if (id) {
         try {
-          const newPost = await getPost(id.toString());
+          const newPost = await getPost();
           if (JSON.stringify(newPost) !== JSON.stringify(post)) {
             setPost(newPost);
           }
-          const newComments = await getComments(id.toString());
-          if (JSON.stringify(newComments) !== JSON.stringify(comments)) {
-            setComments(newComments);
+          const newComments: Comment[] = await getComments(1);
+          if (JSON.stringify(newComments) !== JSON.stringify(comments.slice(0, COMMENTS_PER_PAGE))) {
+            // Use a Set to prevent duplicates
+            const existingCommentIds = new Set(comments.map((comment) => comment.id));
+            const nonDuplicateComments = newComments.filter((comment) => !existingCommentIds.has(comment.id));
+
+            // Merge new and existing comments
+            setComments((prevComments) => [...nonDuplicateComments, ...prevComments]);
           }
         } catch (error) {
           console.error("Error fetching comments:", error);
@@ -100,8 +112,31 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
 
     return () => {
       clearInterval(intervalId); // Clear the interval when the component is unmounted or id changes
+      abortController.current.abort();
+      abortController.current = new AbortController();
     };
   }, [id, comments]);
+
+  const handleShowMore = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios.get(`/api/comments/post/${post.id}?page=${page}`, { signal: abortController.current.signal });
+      setComments((prev) => [...prev, ...response.data]);
+      if (response.data.length < COMMENTS_PER_PAGE) {
+        setMoreToShow(false);
+      }
+      setPage((prevPage) => prevPage + 1);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if ((error as { name: string }).name === "CanceledError") {
+        // console.log("Fetch aborted");
+      } else {
+        console.error("Error fetching posts:", error);
+      }
+    }
+  };
 
   const canAddRule = () => {
     if (comments.length && post?.rules.length) {
@@ -158,7 +193,13 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
                   return old;
                 });
               }
-              setComments((old) => [comment, ...old]);
+              setComments((old) => {
+                if (old.map((x) => x.id).includes(comment.id)) {
+                  //sometimes the interval loop will grab the new comment before this triggers
+                  return old;
+                }
+                return [comment, ...old];
+              });
             }}
             postId={id.toString()}
           />
@@ -168,7 +209,10 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
         </div>
       </div>
       {comments.length > 0 ? (
-        <Comments comments={comments} />
+        <>
+          <Comments comments={comments} />
+          <div className="flex w-full p-10 justify-center items-center">{!moreToShow ? <></> : loading ? <Loader /> : <Button onClick={handleShowMore}>Show More</Button>}</div>
+        </>
       ) : (
         <div className="w-full flex justify-center p-5 pt-32">
           <p className=" opacity-80 dark:text-white italic">No Comments Yet. Make One!</p>

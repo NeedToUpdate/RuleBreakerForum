@@ -1,6 +1,14 @@
 import { CreateCommentDto } from '@/dtos/comments/create-comment.dto';
 import { CommentsService } from '@/services/comments.service';
-import { Controller, Post, Body, Headers, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  Get,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { Comment } from '@/entities/comment/comment.entity';
 @Controller('comments')
 export class CommentsController {
@@ -19,7 +27,7 @@ export class CommentsController {
   }
 
   @Get('post/:postId')
-  findByPost(@Param('postId') postId: string) {
-    return this.commentsService.findByPost(postId);
+  findByPost(@Param('postId') postId: string, @Query('page') page: number) {
+    return this.commentsService.findByPost(postId, page || 1);
   }
 }

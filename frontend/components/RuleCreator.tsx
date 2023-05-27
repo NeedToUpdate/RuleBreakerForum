@@ -40,7 +40,7 @@ export default function RuleCreator(props: Props) {
   }
 
   return (
-    <form className="absolute flex flex-col bottom-10 right-10 w-[80vw] max-w-[300px] p-5 gap-5 bg-primary-300 dark:bg-primary-800 border-2 border-highlight-800 dark:border-highlight-400 rounded-md">
+    <form className="fixed flex flex-col bottom-10 right-10 w-[80vw] max-w-[300px] p-5 gap-5 bg-primary-300 dark:bg-primary-800 border-2 border-highlight-800 dark:border-highlight-400 rounded-md">
       <p className="dark:text-white">
         You have made {commentsMade} comment{commentsMade === 1 ? "" : "s"}, you can add a new rule!
       </p>

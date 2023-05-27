@@ -11,11 +11,11 @@ export default async function handler(
     return;
   }
 
-  const { postId } = req.query;
+  const { postId, page } = req.query;
 
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/comments/post/${postId}`,
+      `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/comments/post/${postId}?page=${page}`,
     );
 
     if (response.status !== 200) {

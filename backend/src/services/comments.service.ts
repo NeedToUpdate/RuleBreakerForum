@@ -86,8 +86,13 @@ export class CommentsService {
     return this.commentsRepository.save(comment);
   }
 
-  findByPost(postId: string) {
+  findByPost(postId: string, page: number) {
+    const commentsPerPage = 20; // Number of posts per page
+    const skip = (page - 1) * commentsPerPage; // Calculate the number of posts to skip
+    const take = commentsPerPage; // Number of posts to take
     return this.commentsRepository.find({
+      take,
+      skip,
       where: { postId: postId },
       order: { createdAt: 'DESC' },
     });
