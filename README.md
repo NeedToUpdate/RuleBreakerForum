@@ -25,15 +25,17 @@ This project makes use of environment variables for configuration. In each of th
 You'll find a `.env.example` file. For each of these, create a corresponding `.env` file with the same keys. For running locally, you wont need to change any values except the ones listed below. You will need to populate those 3 keys with
 the appropriate values.
 
-### backend/
+### backend/.env
 
 The backend requires an OpenAI API key. Instructions on how to obtain this key can be found [here](https://beta.openai.com/docs/developer-quickstart/your-api-keys/).
 
-### auth/
+### auth/.env
 
-The Auth service requires a Google OAuth API ID and Secret. Instructions on how to get these can be found [here](https://developers.google.com/identity/protocols/oauth2).
+The Auth service requires at least a Google OAuth API ID and Secret. Instructions on how to get these can be found [here](https://developers.google.com/identity/protocols/oauth2).
 
-It also requires a GitHub OAuth API ID and Secret. Instructions on how to get these can be found [here](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app).
+It also can use a GitHub OAuth API ID and Secret. Instructions on how to get these can be found [here](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app).
+
+You don't need both to just try it out, the sign in links will simply give errors.
 
 ---
 
