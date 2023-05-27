@@ -6,14 +6,14 @@ import React, { useContext, useRef, useState } from "react";
 export default function NavBar() {
   const { user, logout } = useContext(UserContext);
   const [expanded, setExpanded] = useState(false);
-  const navRef = useRef(null)
-  useOutsideClick(navRef, ()=>setExpanded(false))
+  const navRef = useRef(null);
+  useOutsideClick(navRef, () => setExpanded(false));
   return (
     <nav ref={navRef} className="bg-primary-200 border-highlight-700 dark:border-highlight-500 border-b-2 dark:bg-primary-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link href="/" className="flex gap-5 items-center">
+        <Link href="/" className=" group flex gap-5 items-center">
           <img src="/brain-icon.svg" className="h-8 mr-3" alt="RuleBreaker Forums Logo" />
-          <h3 className="text-secondary-900 dark:text-white text-2xl font-bold">
+          <h3 className="text-secondary-900 group-hover:text-primary-900 dark:group-hover:text-primary-300 dark:text-white text-2xl font-bold duration-150">
             Rule<span className="font-black">Breaker</span>
           </h3>
         </Link>
@@ -35,33 +35,33 @@ export default function NavBar() {
             {user ? (
               <>
                 <li>
-                  <p className="text-sm pointer-events-none opacity-75 duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                  <p className="font-thin pointer-events-none opacity-75 duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-900 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent">
                     User: {user.username}
                   </p>
                 </li>
-                <li onClick={()=>setExpanded(false)} >
+                <li onClick={() => setExpanded(false)}>
                   <Link
                     href="/create-post"
-                    className=" duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className=" duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-900 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent"
                   >
                     Create Post
                   </Link>
                 </li>
 
-                <li onClick={()=>setExpanded(false)} >
+                <li onClick={() => setExpanded(false)}>
                   <p
                     onClick={() => logout()}
-                    className="cursor-pointer select-none duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="cursor-pointer select-none duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-900 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent"
                   >
                     Logout
                   </p>
                 </li>
               </>
             ) : (
-              <li onClick={()=>setExpanded(false)} >
+              <li onClick={() => setExpanded(false)}>
                 <Link
                   href="/login"
-                  className=" duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className=" duration-150 block py-2 pl-3 pr-4 text-secondary-900 rounded hover:bg-secondary-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-900 md:p-0 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-secondary-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Login
                 </Link>
