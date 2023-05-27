@@ -32,8 +32,10 @@ export default function Home({ initialPosts }: Props) {
       </Head>
 
       <main className="flex min-h-screen flex-col p-5">
-        <div className="mb-5 border-2 border-highlight-700 dark:border-highlight-500 rounded-md flex justify-center items-center p-5 bg-secondary-300 dark:bg-secondary-800 text-black dark:text-white font-thin text-lg">
-          <p>Create your own post or join one of the ones below! ChatGPT will moderate each post based on the rules given. See if you can break the rules! If you can make 3 comments, you can add your own rule.</p>
+        <div className="mb-5 border-2 border-highlight-700 dark:border-highlight-500 rounded-md flex flex-col  p-5 bg-secondary-300 dark:bg-secondary-800 text-black dark:text-white font-thin text-lg">
+          <p>Create your own post or join one below!</p>
+          <p>ChatGPT will moderate each post based on the rules given. See if you can break the rules!</p>
+          <p>If you can make 3 comments, you can add your own rule.</p>
         </div>
         <PostViewer initialPosts={initialPosts} />
       </main>
