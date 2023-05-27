@@ -23,8 +23,6 @@ export default function RuleCreator(props: Props) {
         { rule, userId: user?._id }
       );
 
-      // The response data will be available here if the request was successful
-      console.log(response.data);
       props.onCreate(rule);
       setLoading(false);
     } catch (error) {

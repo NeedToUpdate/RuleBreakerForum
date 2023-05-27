@@ -122,7 +122,7 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
   return (
     <div className="bg-secondary-200 dark:bg-secondary-900 w-full">
       <Head>
-        <title>Rule Breaker | {post.title}</title>
+        <title>{`Rule Breaker | ${post.title}`}</title>
       </Head>
       <div className="flex flex-col p-5 bg-primary-300 dark:bg-primary-800 text-secondary-900 dark:text-white">
         <div className="flex justify-between">

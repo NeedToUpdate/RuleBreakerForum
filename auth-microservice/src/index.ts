@@ -61,7 +61,7 @@ passport.use(
           user = new User({
             googleId: profile.id,
             email: email,
-            username: profile.displayName,
+            username: '$no_name',
           });
           await user.save();
         }
@@ -101,7 +101,7 @@ passport.use(
           user = new User({
             githubId: profile.id,
             email: email || profile.username + '@github.com',
-            username: profile.username,
+            username: '$no_name',
           });
           await user.save();
         }

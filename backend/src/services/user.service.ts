@@ -21,4 +21,11 @@ export class UsersService {
 
     return user;
   }
+
+  async updateUser(id: string, data: Partial<User>) {
+    if (!data.username) {
+      throw new HttpException('No Username Provided', HttpStatus.BAD_REQUEST);
+    }
+    return await this.usersRepository.update(id, { ...data });
+  }
 }

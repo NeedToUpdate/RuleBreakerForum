@@ -9,10 +9,10 @@ import {
 import { Post } from '../post/post.entity';
 import { Comment } from '../comment/comment.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @ObjectIdColumn()
-  id: ObjectId;
+  _id: ObjectId;
 
   @Column()
   username: string;

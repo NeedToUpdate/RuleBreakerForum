@@ -44,7 +44,7 @@ router.get(
         expiresIn: 60 * 60 * 24 * 1000,
       },
     );
-    res.redirect(`${process.env.FRONTEND_URI}/login?token=${token}`);
+    res.redirect(`${process.env.FRONTEND_URI}?token=${token}`);
   },
 );
 
@@ -76,7 +76,7 @@ router.get(
         expiresIn: 60 * 60 * 24 * 1000,
       },
     );
-    res.redirect(`${process.env.FRONTEND_URI}/login?token=${token}`);
+    res.redirect(`${process.env.FRONTEND_URI}?token=${token}`);
   },
 );
 
