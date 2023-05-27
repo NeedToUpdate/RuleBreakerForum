@@ -30,12 +30,12 @@ export default function Username({ userId }: Props) {
     };
     const timeout = setTimeout(() => {
       fetchUsername();
-    }, Math.random() * 500);
+    }, Math.random() * 200);
     return () => {
       clearTimeout(timeout);
       controller.abort();
     };
   }, [userId, usernames, setUsername]);
 
-  return <>{username || userId}</>;
+  return <>{username || ""}</>;
 }
