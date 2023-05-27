@@ -24,7 +24,7 @@ const Comment = ({ comment }: Props) => {
       <div className="flex flex-row justify-between items-end">
         <div>{comment.ruleBroken !== null && comment.ruleBroken !== undefined && <p className="text-amber-700 dark:text-amber-500">Rule Broken: {comment.ruleBroken}</p>}</div>
         <div className="flex-1"></div>
-        <div className="flex items-end">
+        <div className="flex items-end min-h-[16px]">
           <p className="text-xs font-thin opacity-80 m-0">{comment.userId === user?._id ? "You" : <UserName userId={comment.userId} />}</p>
         </div>
       </div>

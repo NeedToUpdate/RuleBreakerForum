@@ -29,6 +29,7 @@ export default function Username({ userId }: Props) {
       }
     };
     const timeout = setTimeout(() => {
+      //cheap way to stall a few of the requests and make them grab the cached data
       fetchUsername();
     }, Math.random() * 200);
     return () => {
