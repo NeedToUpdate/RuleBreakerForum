@@ -19,6 +19,7 @@ import { LoggerMiddleware } from './middleware/logRequests';
       useUnifiedTopology: true,
       useNewUrlParser: true,
       logging: true,
+      w: 0,
     }),
     UserModule,
     PostsModule,
