@@ -3,6 +3,7 @@ import axios from "axios";
 import Loader from "./Basic/Loader";
 import Post from "./Post";
 import Button from "./Basic/Button";
+import Link from "next/link";
 
 interface Props {
   initialPosts: Post[];
@@ -51,13 +52,25 @@ export default function PostViewer({ initialPosts }: Props) {
   return (
     <>
       <h1 className="text-2xl pl-2 font-thin dark:text-primary-300 mb-10">Posts</h1>
-
-      <div className="flex flex-col gap-5">
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
-      </div>
-      <div className="flex w-full p-10 justify-center items-center">{!moreToShow ? <></> : loading ? <Loader /> : <Button onClick={handleShowMore}>Show More</Button>}</div>
+      {posts.length ? (
+        <>
+          <div className="flex flex-col gap-5">
+            {posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+          </div>
+          <div className="flex w-full p-10 justify-center items-center">{!moreToShow ? <></> : loading ? <Loader /> : <Button onClick={handleShowMore}>Show More</Button>}</div>
+        </>
+      ) : (
+        <div className="w-full flex justify-center p-5 pt-32">
+          <p className=" opacity-80 dark:text-white italic">
+            No Posts Yet.{" "}
+            <Link href="create-post" className="text-secondary-900 hover:text-primary-900 dark:hover:text-primary-300 dark:text-white underline duration-150">
+              Make One!
+            </Link>
+          </p>
+        </div>
+      )}
     </>
   );
 }

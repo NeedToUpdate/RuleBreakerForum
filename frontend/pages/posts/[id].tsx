@@ -11,6 +11,7 @@ import Head from "next/head";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import Username from "@/components/UserName";
 import Button from "@/components/Basic/Button";
+import Link from "next/link";
 
 const COMMENTS_PER_PAGE = 20;
 
@@ -177,7 +178,19 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
         ))}
         {post.usersBanned.includes(user?._id) || !user ? (
           <div className="w-full flex justify-center p-5 mt-2">
-            <p className="text-sm opacity-80">{user ? "You have been banned by ChatGPT." : "Please Log In to post a comment."}</p>
+            <p className="text-sm opacity-80">
+              {user ? (
+                <>You have been banned by ChatGPT.</>
+              ) : (
+                <>
+                  Please{" "}
+                  <Link href="/login" className="text-secondary-900 hover:text-primary-900 dark:hover:text-primary-300 dark:text-white underline duration-150">
+                    Log In
+                  </Link>{" "}
+                  to post a comment.
+                </>
+              )}
+            </p>
           </div>
         ) : (
           <CommentBox
