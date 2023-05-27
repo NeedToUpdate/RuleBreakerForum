@@ -102,6 +102,7 @@ export class PostsService {
     }
     const token = authorizationHeader.replace('Bearer ', '');
     if (!token) {
+      console.log(token);
       throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
     }
     const response = await firstValueFrom(

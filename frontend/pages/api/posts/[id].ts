@@ -8,6 +8,7 @@ export default async function handler(
 ) {
   const { method } = req;
   const { id } = req.query; // Get the id from the request parameters
+  const token = req.headers.authorization; // Get the authorization token from the request headers
 
   switch (method) {
     case 'GET':
@@ -24,6 +25,7 @@ export default async function handler(
       try {
         const response = await axios.delete(
           `${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URI}/posts/${id}`,
+          { headers: { Authorization: token } }, // Pass the token in the request headers
         );
         res.status(200).json(response.data);
       } catch (error) {
