@@ -2,7 +2,7 @@ import { UserProvider } from "@/utils/UserContext";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import NavBar from "@/components/NavBar";
-import { Kanit } from "@next/font/google";
+import { Kanit } from "next/font/google";
 const kanit = Kanit({
   subsets: ["latin"],
   weight: ["500", "700", "900", "300"],

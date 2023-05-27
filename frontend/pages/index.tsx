@@ -1,9 +1,6 @@
 import PostViewer from "@/components/PostViewer";
-import { UserContext } from "@/utils/UserContext";
 import axios from "axios";
 import Head from "next/head";
-import Link from "next/link";
-import { useContext } from "react";
 
 interface Props {
   initialPosts: Post[];
@@ -18,7 +15,7 @@ export default function Home({ initialPosts }: Props) {
         <meta name="description" content="See if you can break some rules!" />
         <meta name="keywords" content="chatgpt, forum, ai" />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="English" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />

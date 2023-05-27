@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+
+RUN npm install -D @swc/cli @swc/core
 RUN npm install
 
 

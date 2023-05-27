@@ -1,4 +1,5 @@
 import { UserContext } from "@/utils/UserContext";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect } from "react";
 
@@ -18,6 +19,9 @@ export default function LoginPage() {
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
+      <Head>
+        <title>Rule Breaker | Login</title>
+      </Head>
       <div className="flex flex-col justify-center items-center gap-10 h-[80vh] max-h-[300px] w-screen max-w-[400px] p-5 rounded-md bg-primary-200 dark:bg-primary-700 border-x-2 border-highlight-700 dark:border-highlight-400">
         <button
           onClick={handleLogin("google")}
