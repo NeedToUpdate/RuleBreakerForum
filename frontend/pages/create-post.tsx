@@ -3,6 +3,7 @@ import axios from "axios";
 import { UserContext } from "@/utils/UserContext";
 import Button from "@/components/Basic/Button";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export default function CreatePost() {
   const { logout } = useContext(UserContext);
@@ -33,6 +34,9 @@ export default function CreatePost() {
 
   return (
     <div className="bg-secondary-200 dark:bg-secondary-900 w-full">
+      <Head>
+        <title>Rule Breaker | Create Post</title>
+      </Head>
       <form className="flex flex-col p-5 bg-primary-300 dark:bg-primary-800 dark:text-white gap-5 justify-center items-center">
         <input
           className="block p-2.5 w-full text-sm text-black bg-secondary-50 rounded-lg border border-secondary-300 focus:ring-highlight-500 focus:border-highlight-500 dark:bg-secondary-900 dark:border-secondary-600 dark:placeholder-secondary-400 dark:text-white dark:focus:ring-highlight-500 dark:focus:border-highlight-500"

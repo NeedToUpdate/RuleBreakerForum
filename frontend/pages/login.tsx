@@ -4,9 +4,8 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect } from "react";
 
 export default function LoginPage() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const router = useRouter();
-  console.log(user);
   useEffect(() => {
     if (user) {
       router.replace("/");
