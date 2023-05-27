@@ -8,10 +8,10 @@ import RuleCreator from "@/components/RuleCreator";
 import Loader from "@/components/Basic/Loader";
 import { NextPageContext } from "next";
 import Head from "next/head";
-import { TrashIcon } from '@heroicons/react/24/solid'
+import { TrashIcon } from "@heroicons/react/24/solid";
+import Username from "@/components/UserName";
 
 export async function getServerSideProps(context: NextPageContext) {
-
   // Get the id from the context
   const { id } = context.query;
   let post: Post | null = null;
@@ -74,11 +74,11 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`/api/posts/${post.id}`);
-      router.push('/')
+      router.push("/");
     } catch (error) {
       console.error("Failed to delete post", error);
     }
-  }
+  };
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -128,14 +128,20 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
         <div className="flex justify-between">
           <h2 className="text-3xl mb-4">{post.title}</h2>
           <div className="flex-1"></div>
-          {post.user === user?._id && <TrashIcon onClick={handleDelete} className="w-6 h-6 cursor-pointer hover:text-highlight-600 dark:hover:text-highlight-300 duration-150"></TrashIcon>
-      }  </div>
-        <p>Rules:</p>
+          {post.user === user?._id && <TrashIcon onClick={handleDelete} className="w-6 h-6 cursor-pointer hover:text-highlight-600 dark:hover:text-highlight-300 duration-150"></TrashIcon>}{" "}
+        </div>
+        <div className="flex justify-between my-2">
+          <p>Rules:</p>
+          <div className="flex-1"></div>
+          <p className="text-md opacity-80 font-thin">
+            Posted by: <Username userId={post.user} />
+          </p>
+        </div>
         {post.rules.map((x, i) => (
           <p key={i} className="capitalize font-bold pl-1">{`${i + 1}.) ${x[1]}`}</p>
         ))}
         {post.usersBanned.includes(user?._id) || !user ? (
-          <div className="w-full flex justify-center p-5">
+          <div className="w-full flex justify-center p-5 mt-2">
             <p className="text-sm opacity-80">{user ? "You have been banned by ChatGPT." : "Please Log In to post a comment."}</p>
           </div>
         ) : (

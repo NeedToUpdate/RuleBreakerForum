@@ -1,6 +1,7 @@
 import { UserContext } from "@/utils/UserContext";
 import axios from "axios";
 import React, { useContext } from "react";
+import UserName from "./UserName";
 
 interface Props {
   comment: Comment;
@@ -21,7 +22,7 @@ const Comment = ({ comment }: Props) => {
         <div>{comment.ruleBroken !== null && comment.ruleBroken !== undefined && <p className="text-amber-500">Rule Broken: {comment.ruleBroken}</p>}</div>
         <div className="flex-1"></div>
         <div className="flex items-end">
-          <p className="text-xs opacity-80 m-0">{comment.userId === user?._id ? "You" : comment.userId}</p>
+          <p className="text-xs font-thin opacity-80 m-0">{comment.userId === user?._id ? "You" : <UserName userId={comment.userId} /> }</p>
         </div>
       </div>
     </div>
