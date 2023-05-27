@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./backend:/app
+      - /app/node_modules
     ports:
       - '3001:3000'
     depends_on:
@@ -22,6 +23,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     ports:
       - '3000:3000'
 
@@ -46,6 +48,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./auth-microservice:/app
+      - /app/node_modules
     ports:
       - '5555:5555'
     depends_on:
