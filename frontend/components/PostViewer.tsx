@@ -11,12 +11,11 @@ interface Props {
 export default function PostViewer({ initialPosts }: Props) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [page, setPage] = useState(2);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [moreToShow, setMoreToShow] = useState(true);
   const abortController = useRef(new AbortController());
 
   useEffect(() => {
-    fetchPosts();
     return () => {
       // Cancel the fetch call when unmounted
       abortController.current.abort();

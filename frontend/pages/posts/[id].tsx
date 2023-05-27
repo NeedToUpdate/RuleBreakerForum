@@ -7,10 +7,10 @@ import { UserContext } from "@/utils/UserContext";
 import RuleCreator from "@/components/RuleCreator";
 import Loader from "@/components/Basic/Loader";
 import { NextPageContext } from "next";
+import Head from "next/head";
+import { TrashIcon } from '@heroicons/react/24/solid'
 
 export async function getServerSideProps(context: NextPageContext) {
-  // Use an environment variable to get the base URL
-  const baseUrl = process.env.BASE_URL;
 
   // Get the id from the context
   const { id } = context.query;
@@ -71,6 +71,15 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`/api/posts/${post.id}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to delete post");
+    }
+  }
+
   useEffect(() => {
     const intervalId = setInterval(async () => {
       if (id) {
@@ -112,8 +121,14 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
 
   return (
     <div className="bg-secondary-200 dark:bg-secondary-900 w-full">
+      <Head>
+        <title>Rule Breaker | {post.title}</title>
+      </Head>
       <div className="flex flex-col p-5 bg-primary-300 dark:bg-primary-800 text-secondary-900 dark:text-white">
-        <h2 className="text-3xl mb-4">{post.title}</h2>
+        <div className="flex justify-between">
+          <h2 className="text-3xl mb-4">{post.title}</h2>
+          <TrashIcon onClick={handleDelete} className="w-6 h-6 cursor-pointer hover:text-highlight-600 dark:hover:text-highlight-300 duration-150"></TrashIcon>
+        </div>
         <p>Rules:</p>
         {post.rules.map((x, i) => (
           <p key={i} className="capitalize font-bold pl-1">{`${i + 1}.) ${x[1]}`}</p>
