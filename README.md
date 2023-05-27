@@ -5,7 +5,7 @@ This is a fun little forum where ChatGPT is the moderator. You can create posts 
 This is a small distributed micro-service-ish setup. There is a Next.js frontend, which does server side rendering and prefetching, a Nest.js backend, an OAuth authentication service, and a MongoDB database. The backend is using the OpenAI
 API.
 
-You can find a live version of this app on [my site](rulebreaker.artemnikitin.dev).
+You can find a live version of this app on [my site](https://rulebreaker.artemnikitin.dev).
 
 (Although it might not be up forever)
 
