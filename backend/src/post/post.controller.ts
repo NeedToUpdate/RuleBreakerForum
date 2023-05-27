@@ -51,7 +51,7 @@ export class PostsController {
     return this.postsService.addRule(id, rule, userId);
   }
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(id);
+  remove(@Param('id') id: string, @Headers('authorization') token: string) {
+    return this.postsService.remove(id, token);
   }
 }

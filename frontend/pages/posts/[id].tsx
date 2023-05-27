@@ -67,16 +67,16 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
       const response = await axios.get(`/api/comments/post/${postId}`);
       return response.data;
     } catch (error) {
-      throw new Error("Failed to fetch comments");
+      console.error("Failed to fetch comments");
     }
   };
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`/api/posts/${post.id}`);
-      return response.data;
+      router.push('/')
     } catch (error) {
-      throw new Error("Failed to delete post");
+      console.error("Failed to delete post", error);
     }
   }
 
@@ -127,8 +127,9 @@ export default function SinglePostPage({ initialPost, initialComments }: Props) 
       <div className="flex flex-col p-5 bg-primary-300 dark:bg-primary-800 text-secondary-900 dark:text-white">
         <div className="flex justify-between">
           <h2 className="text-3xl mb-4">{post.title}</h2>
-          <TrashIcon onClick={handleDelete} className="w-6 h-6 cursor-pointer hover:text-highlight-600 dark:hover:text-highlight-300 duration-150"></TrashIcon>
-        </div>
+          <div className="flex-1"></div>
+          {post.user === user?._id && <TrashIcon onClick={handleDelete} className="w-6 h-6 cursor-pointer hover:text-highlight-600 dark:hover:text-highlight-300 duration-150"></TrashIcon>
+      }  </div>
         <p>Rules:</p>
         {post.rules.map((x, i) => (
           <p key={i} className="capitalize font-bold pl-1">{`${i + 1}.) ${x[1]}`}</p>

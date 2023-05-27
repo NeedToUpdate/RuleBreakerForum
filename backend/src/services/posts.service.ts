@@ -96,7 +96,46 @@ export class PostsService {
     return this.postsRepository.update(id, updatePostDto);
   }
 
-  remove(id: string) {
+  async remove(id: string, authorizationHeader: string) {
+    if (!authorizationHeader) {
+      throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
+    }
+    const token = authorizationHeader.replace('Bearer ', '');
+    if (!token) {
+      throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
+    }
+    const response = await firstValueFrom(
+      this.httpService.get(
+        `${process.env.AUTH_SERVICE_URI}/auth/validate?token=${token}`,
+        {
+          headers: { authorization: token },
+        },
+      ),
+    );
+
+    // If the token is not valid, throw an error
+    if (!response.data.authenticated) {
+      throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
+    }
+
+    // Get the user's session information
+    const session = await firstValueFrom(
+      this.httpService.get(`${process.env.AUTH_SERVICE_URI}/auth/session`, {
+        headers: { authorization: authorizationHeader },
+      }),
+    );
+
+    const post = await this.postsRepository.findOne({
+      where: { _id: new ObjectId(id) },
+    });
+    if (!post) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+    console.log(post.user, session.data._id);
+    if (post.user !== session.data._id) {
+      throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
+    }
+
     return this.postsRepository.delete(id);
   }
 
