@@ -1,3 +1,4 @@
+import { handleAxiosError } from '@/utils/handleAxiosError';
 import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -24,13 +25,5 @@ export default async function handler(
     default:
       res.setHeader('Allow', ['POST']);
       res.status(405).end(`Method ${method} Not Allowed`);
-  }
-}
-
-function handleAxiosError(error: unknown, res: NextApiResponse) {
-  if (axios.isAxiosError(error)) {
-    res.status(error.response?.status || 400).json({ error: error.message });
-  } else {
-    res.status(500).json({ error: 'Internal Server Error' });
   }
 }

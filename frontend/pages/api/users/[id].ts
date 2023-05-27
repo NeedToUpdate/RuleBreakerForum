@@ -1,3 +1,4 @@
+import { handleAxiosError } from '@/utils/handleAxiosError';
 import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -14,14 +15,5 @@ export default async function handler(
     return res.status(200).json(response.data);
   } catch (error) {
     handleAxiosError(error, res);
-  }
-}
-
-function handleAxiosError(error: unknown, res: NextApiResponse) {
-  if (axios.isAxiosError(error)) {
-    console.log(error);
-    res.status(error.response?.status || 400).json({ error: error.message });
-  } else {
-    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
